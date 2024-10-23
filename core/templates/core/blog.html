@@ -1,0 +1,54 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+        <div class="w-full">
+            <h2 class="text-3xl font-bold mb-4">Posts</h2>
+            <div class="w-5/6 mt-3 mb-4">
+                <hr >
+            </div>
+            <ul>
+                {% if not posts %}
+                    <li>
+                        <p class="text-lg text-center mt-3">Nenhum post encontrado.</p>
+                    </li>
+                {% endif %}
+                {% for post in posts %}
+                    <li>
+                        <h2 class="text-lg font-bold mb-2">
+                            <a class="underline hover:no-underline text-sky-700" href="{% url 'post_detail' pk=post.pk %}">
+                                {{ post.title }}
+                            </a>
+                        </h2>
+                        <p class="text-sm text-gray-500">
+                           Publicado em {{ post.created_at|date:"d/m/Y" }}                             
+                        </p>
+                        <p>{{ post.content }}</p>
+                        <p class="mt-2">Tags: 
+                            {% for tag in post.tags.all %}
+                                <a class="underline hover:no-underline text-blue-500" href="{% url 'posts_by_tag' tag.id %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </p>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="w-50 px-4">
+            <h2 class="font-bold mb-4">Tags</h2>
+            <ul>
+                <li>
+                    <a class="underline hover:no-underline text-blue-500" href="{% url 'blog' %}">
+                        Ver todos os posts
+                    </a>
+                </li>
+                {% for tag in tags %}
+                    <li>
+                        <a class="underline hover:no-underline text-blue-500" href="{% url 'posts_by_tag' tag.id %}">
+                            {{ tag.name }}
+                        </a>
+                    </li>
+
+                {% endfor %}
+            </ul>
+        </div>
+{% endblock %}
